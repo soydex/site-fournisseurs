@@ -2,6 +2,7 @@ import { useState } from "react";
 
 function FormulaireFournisseur({ onSubmit }) {
   const [formData, setFormData] = useState({
+    nomAnnonceur: "",
     nomPrestataire: "",
     format: "",
     formatSpecifique: "",
@@ -24,6 +25,7 @@ function FormulaireFournisseur({ onSubmit }) {
     onSubmit(formData);
     // Réinitialiser le formulaire
     setFormData({
+      nomAnnonceur: "",
       nomPrestataire: "",
       format: "",
       formatSpecifique: "",
@@ -42,7 +44,21 @@ function FormulaireFournisseur({ onSubmit }) {
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-gray-700 mb-2">Nom du prestataire</label>
+          <label className="block text-gray-700 mb-2">Nom de l'annonceur</label>
+          <input
+            type="text"
+            name="nomAnnonceur"
+            value={formData.nomAnnonceur}
+            onChange={handleChange}
+            className="w-full p-2 border border-gray-300 rounded"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="block text-gray-700 mb-2">
+            Nom du prestataire (vous)
+          </label>
           <input
             type="text"
             name="nomPrestataire"

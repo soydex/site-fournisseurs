@@ -20,6 +20,7 @@ mongoose.connect('mongodb://localhost:27017/besoins_affichage', {
 
 // Modèle de données
 const BesoinSchema = new mongoose.Schema({
+  nomAnnonceur: String,
   nomPrestataire: String,
   format: String,
   formatSpecifique: String,

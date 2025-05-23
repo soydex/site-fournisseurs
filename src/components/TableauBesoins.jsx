@@ -9,6 +9,7 @@ function TableauBesoins({ data, onDelete }) {
         <table className="min-w-full bg-white border border-gray-300">
           <thead>
             <tr className="bg-gray-100">
+              <th className="py-2 px-4 border-b border-r">Annonceur</th>
               <th className="py-2 px-4 border-b border-r">Prestataire</th>
               <th className="py-2 px-4 border-b border-r">Format</th>
               <th className="py-2 px-4 border-b border-r">Format spécifique</th>
@@ -20,8 +21,9 @@ function TableauBesoins({ data, onDelete }) {
             </tr>
           </thead>
           <tbody>
-            {data.map((item, index) => (
-              <tr key={index} className="hover:bg-gray-50">
+            {data.map((item) => (
+              <tr key={item._id} className="hover:bg-gray-50">
+                <td className="py-2 px-4 border-b border-r">{item.nomAnnonceur}</td>
                 <td className="py-2 px-4 border-b border-r">{item.nomPrestataire}</td>
                 <td className="py-2 px-4 border-b border-r">{item.format}</td>
                 <td className="py-2 px-4 border-b border-r">{item.formatSpecifique}</td>
@@ -31,7 +33,7 @@ function TableauBesoins({ data, onDelete }) {
                 <td className="py-2 px-4 border-b border-r">{item.commentaires}</td>
                 <td className="py-2 px-4 border-b">
                   <button
-                    onClick={() => onDelete(index)}
+                    onClick={() => onDelete(item._id)}  // Utiliser l'ID MongoDB au lieu de l'index
                     className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600 transition duration-300"
                   >
                     Supprimer
