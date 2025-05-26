@@ -21,5 +21,8 @@ export default defineConfig({
         },
       },
     },
+    target: 'esnext',
+    assetsDir: 'assets'
   },
+  base: '/'
 });
