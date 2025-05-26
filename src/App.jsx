@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import FormulaireFournisseur from './components/FormulaireFournisseur';
 import TableauPage from './pages/TableauPage';
 import AdminLoginPage from './pages/AdminLoginPage';
+import NotFoundPage from './pages/NotFoundPage';
 import axios from 'axios';
 
 // Composant de protection des routes admin
@@ -49,6 +50,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   );
