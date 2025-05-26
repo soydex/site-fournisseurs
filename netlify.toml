@@ -12,10 +12,10 @@
 
 [[redirects]]
   from = "/api/*"
-  to = "https://votre-serveur-backend.herokuapp.com/api/:splat"
+  to = "https://site-fournisseurs.onrender.com/api/:splat"
   status = 200
   force = true
+  headers = {Access-Control-Allow-Origin = "*"}
 
 [build.environment]
   NODE_VERSION = "18"
-  MONGODB_URI = "mongodb+srv://comadmin:comymedia2025@cluster0.ewmfj56.mongodb.net/besoins_affichage?retryWrites=true&w=majority"
