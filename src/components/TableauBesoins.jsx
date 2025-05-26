@@ -1,4 +1,13 @@
 function TableauBesoins({ data, onDelete }) {
+  // Fonction pour formater la date
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat('fr-FR', {
+      dateStyle: 'short',
+      timeStyle: 'short'
+    }).format(date);
+  };
+
   return (
     <div className="overflow-x-auto mt-8">
       <h2 className="text-2xl font-bold mb-4 text-center">Liste des besoins d'affichage</h2>
@@ -9,6 +18,7 @@ function TableauBesoins({ data, onDelete }) {
         <table className="min-w-full bg-white border border-gray-300">
           <thead>
             <tr className="bg-gray-100">
+              <th className="py-2 px-4 border-b border-r">Date/Heure</th>
               <th className="py-2 px-4 border-b border-r">Annonceur</th>
               <th className="py-2 px-4 border-b border-r">Prestataire</th>
               <th className="py-2 px-4 border-b border-r">Format</th>
@@ -23,6 +33,7 @@ function TableauBesoins({ data, onDelete }) {
           <tbody>
             {data.map((item) => (
               <tr key={item._id} className="hover:bg-gray-50">
+                <td className="py-2 px-4 border-b border-r">{formatDate(item.dateCreation)}</td>
                 <td className="py-2 px-4 border-b border-r">{item.nomAnnonceur}</td>
                 <td className="py-2 px-4 border-b border-r">{item.nomPrestataire}</td>
                 <td className="py-2 px-4 border-b border-r">{item.format}</td>
