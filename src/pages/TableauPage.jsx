@@ -6,23 +6,56 @@ import axios from "axios";
 function TableauPage() {
   const [besoins, setBesoins] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState(""); // Une seule déclaration
 
-  useEffect(() => {
-    fetchBesoins();
-  }, []);
-
-  const fetchBesoins = async () => {
+  const fetchBesoins = useCallback(async () => {
     try {
       setLoading(true);
+      const cachedData = sessionStorage.getItem("besoinsCache");
+      const cacheTimestamp = sessionStorage.getItem("besoinsCacheTimestamp");
+
+      if (cachedData && cacheTimestamp && Date.now() - cacheTimestamp < 60000) {
+        setBesoins(JSON.parse(cachedData));
+        setLoading(false);
+        return;
+      }
+
       const response = await axios.get("/api/besoins");
       setBesoins(response.data);
+      sessionStorage.setItem("besoinsCache", JSON.stringify(response.data));
+      sessionStorage.setItem("besoinsCacheTimestamp", Date.now().toString());
       setLoading(false);
     } catch (error) {
       console.error("Erreur lors de la récupération des données:", error);
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(fetchBesoins, 30000);
+    fetchBesoins();
+    return () => clearInterval(interval);
+  }, [fetchBesoins]);
+
+  // Fonction de recherche optimisée avec debounce
+  const debouncedSearch = useCallback(
+    debounce((query) => {
+      setSearchQuery(query);
+    }, 300),
+    []
+  );
+
+  // Filtrage optimisé avec useMemo
+  const filteredBesoins = useMemo(() => {
+    if (!searchQuery) return besoins;
+
+    const searchLower = searchQuery.toLowerCase();
+    return besoins.filter((besoin) =>
+      Object.values(besoin).some((value) =>
+        String(value).toLowerCase().includes(searchLower)
+      )
+    );
+  }, [besoins, searchQuery]);
 
   const supprimerBesoin = async (id) => {
     if (window.confirm("Êtes-vous sûr de vouloir supprimer cette entrée ?")) {
@@ -51,27 +84,6 @@ function TableauPage() {
       }
     }
   };
-
-  // Fonction de recherche optimisée avec debounce
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const debouncedSearch = useCallback(
-    debounce((query) => {
-      setSearchQuery(query);
-    }, 300),
-    []
-  );
-
-  // Filtrage optimisé avec useMemo
-  const filteredBesoins = useMemo(() => {
-    if (!searchQuery) return besoins;
-
-    const searchLower = searchQuery.toLowerCase();
-    return besoins.filter((besoin) =>
-      Object.values(besoin).some((value) =>
-        String(value).toLowerCase().includes(searchLower)
-      )
-    );
-  }, [besoins, searchQuery]);
 
   // Composant SearchBar optimisé
   const SearchBar = () => (

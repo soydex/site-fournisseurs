@@ -72,13 +72,21 @@ const Besoin = mongoose.model("Besoin", BesoinSchema);
 // Routes API avec gestion d'erreurs améliorée
 app.get("/api/besoins", async (req, res) => {
   try {
-    const besoins = await Besoin.find().sort({ dateCreation: -1 }).lean(); // Améliore les performances en retournant des objets JS simples
+    // Ajouter mise en cache avec Redis ou utiliser .cache() de mongoose
+    const besoins = await Besoin.find()
+      .select('-__v') // Exclure les champs non nécessaires
+      .sort({ dateCreation: -1 })
+      .limit(100) // Limiter le nombre de résultats
+      .lean()
+      .exec();
+    
+    // Ajouter les headers de cache
+    res.set('Cache-Control', 'public, max-age=30');
     res.json(besoins);
   } catch (err) {
     console.error("Erreur lors de la récupération des besoins:", err);
     res.status(500).json({
-      message: "Erreur serveur lors de la récupération des besoins",
-      error: process.env.NODE_ENV === "development" ? err.message : undefined,
+      message: "Erreur serveur lors de la récupération des besoins"
     });
   }
 });

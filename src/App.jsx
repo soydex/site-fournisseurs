@@ -17,8 +17,14 @@ function App() {
   const [dernieresRequetes, setDernieresRequetes] = useState([]);
 
   useEffect(() => {
-    chargerDernieresRequetes();
-  });
+    const interval = setInterval(() => {
+      chargerDernieresRequetes();
+    }, 30000); // Vérifier toutes les 30 secondes au lieu de constamment
+
+    chargerDernieresRequetes(); // Chargement initial
+
+    return () => clearInterval(interval);
+  }, []); // Ajouter un tableau de dépendances vide
 
   const nettoyerLocalStorage = () => {
     const maintenant = new Date().getTime();
