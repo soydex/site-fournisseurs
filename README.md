@@ -1,6 +1,6 @@
 # Application de Gestion des Besoins d'Affichage
 
-Cette application web permet de gérer les besoins d'affichage pour différents prestataires. Elle est construite avec la stack MERN (MongoDB, Express, React, Node.js).
+Cette application web permet de gérer les besoins d'affichage pour différents prestataires. Elle est construite avec React, Express et MongoDB.
 
 ## Structure du Projet
 
@@ -8,112 +8,117 @@ Cette application web permet de gérer les besoins d'affichage pour différents 
 site-fournisseurs/
 ├── src/
 │   ├── components/
+│   │   ├── DernieresRequetes.jsx
 │   │   ├── FormulaireFournisseur.jsx
 │   │   └── TableauBesoins.jsx
+│   ├── pages/
+│   │   ├── AdminLoginPage.jsx
+│   │   ├── NotFoundPage.jsx
+│   │   └── TableauPage.jsx
 │   ├── App.jsx
-│   ├── main.jsx
-│   └── index.css
+│   └── main.jsx
 ├── server/
 │   └── index.js
-└── vite.config.js
+├── .env.production
+├── vite.config.js
+├── eslint.config.js
+└── package.json
 ```
 
-## Technologies Utilisées
+## Fonctionnalités
 
-- **Frontend:**
-  - React 19
-  - Tailwind CSS
-  - Axios pour les requêtes HTTP
-  - Vite comme bundler
+### Interface Utilisateur
+- **Formulaire de Saisie** : Interface intuitive pour la saisie des besoins d'affichage
+- **Historique Local** : Affichage des dernières requêtes de l'utilisateur
+- **Gestion des Sessions** : Conservation des données pendant 24h
+- **Page 404** : Gestion élégante des routes non trouvées
 
-- **Backend:**
-  - Node.js avec Express
-  - MongoDB avec Mongoose
-  - Cors pour la gestion des requêtes cross-origin
+### Interface Administration
+- **Authentification** : Page de connexion sécurisée
+- **Tableau de Bord** : Vue complète des besoins avec fonctionnalités de recherche
+- **Export Excel** : Possibilité d'exporter les données au format XLSX
+- **Gestion des Données** : Suppression individuelle ou complète des entrées
 
-## Fonctionnalités Principales
+### Sécurité
+- Protection des routes administratives
+- Stockage sécurisé du mot de passe administrateur
+- Validation des données côté serveur
+- Gestion des CORS
 
-### 1. Formulaire de Saisie (FormulaireFournisseur.jsx)
-- Saisie du nom du prestataire
-- Sélection du format d'affichage (plusieurs options prédéfinies)
-- Option pour spécifier un format personnalisé
-- Champs pour le format visible, nombre d'affiches, adresse de livraison
-- Zone de commentaires
+## Technologies
 
-### 2. Tableau des Besoins (TableauBesoins.jsx)
-- Affichage des besoins enregistrés
-- Possibilité de supprimer des entrées individuelles
-- Affichage d'un message si aucune donnée n'est disponible
+### Frontend
+- React 19
+- React Router DOM 7
+- Axios pour les requêtes HTTP
+- TailwindCSS 4
+- XLSX pour l'export Excel
+- Vite comme bundler
 
-### 3. Gestion des Données (App.jsx)
-- Chargement automatique des données au démarrage
-- Ajout de nouveaux besoins
-- Suppression de besoins individuels
-- Option pour vider complètement la base de données
+### Backend
+- Node.js avec Express 5
+- MongoDB avec Mongoose 8
+- CORS
+- Validation des données
 
-## API Backend
+### Outils de Développement
+- ESLint 9
+- Configuration Vite optimisée
+- Support du Hot Module Replacement
 
-Le serveur Express expose les endpoints suivants :
+## Installation
 
-- `GET /api/besoins` : Récupère tous les besoins
-- `POST /api/besoins` : Crée un nouveau besoin
-- `DELETE /api/besoins/:id` : Supprime un besoin spécifique
-- `DELETE /api/besoins` : Supprime tous les besoins
+1. **Cloner le dépôt**
+```bash
+git clone [url-du-repo]
+cd site-fournisseurs
+```
 
-## Configuration de la Base de Données
-
-MongoDB est utilisé comme base de données avec le schéma suivant pour les besoins :
-- nomPrestataire
-- format
-- formatSpecifique
-- formatVisible
-- nombreAffiches
-- adresseLivraison
-- commentaires
-- dateCreation
-
-## Installation et Démarrage
-
-1. **Installation des dépendances:**
+2. **Installer les dépendances**
 ```bash
 npm install
 ```
 
-2. **Démarrage du serveur MongoDB:**
-```bash
-mongod
-```
+3. **Configuration**
+- Créer un fichier `.env.production` avec le mot de passe admin
+- Vérifier la configuration MongoDB dans `server/index.js`
 
-3. **Démarrage du serveur backend (depuis le dossier server):**
+4. **Démarrer l'application**
 ```bash
-node index.js
-```
-ou depuis la racine du projet :
-```bash
+# Démarrer le serveur backend
 node server/index.js
-```
 
-4. **Démarrage du frontend:**
-```bash
+# Démarrer le frontend en développement
 npm run dev
+
+# Ou construire pour la production
+npm run build
 ```
 
-## Configuration du Développement
+## Configuration
 
-- Le serveur de développement frontend tourne sur le port 5173
-- Le serveur backend tourne sur le port 5000
-- Vite est configuré avec un proxy pour rediriger les requêtes `/api` vers le backend
-- ESLint est configuré pour le linting du code React
+### Environnement de Production
+```env
+admin_password=votre_mot_de_passe
+```
 
-## Sécurité et Performance
+### Proxy
+Le serveur de développement est configuré avec un proxy vers le backend :
+```javascript
+{
+  "/api": "http://localhost:5000"
+}
+```
 
-- Validation des données côté serveur
-- Gestion des erreurs avec retours appropriés
-- Utilisation de CORS pour la sécurité des requêtes
-- Optimisation des requêtes MongoDB avec tri par date de création
+## Performance et Optimisations
+- Mise en cache des requêtes côté client
+- Debounce sur la recherche
+- Pagination côté serveur
+- Optimisation des requêtes MongoDB
+- Chunking automatique des bundles
 
-## Notes de Maintenance
-
-- Les versions des dépendances sont fixées pour la stabilité
-- Le code est structuré de manière modulaire pour faciliter la maintenance
-- Les composants React utilisent les hooks modernes (useState, useEffect)
+## Maintenance
+- Vérification régulière des dépendances
+- Linting automatique avec ESLint
+- Tests unitaires recommandés
+- Documentation du code à jour

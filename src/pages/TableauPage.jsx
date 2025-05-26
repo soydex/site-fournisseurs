@@ -7,7 +7,7 @@ import axios from "axios";
 function TableauPage() {
   const [besoins, setBesoins] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState(""); // Une seule déclaration
+  const [searchQuery, setSearchQuery] = useState("");
 
   const fetchBesoins = useCallback(async () => {
     try {

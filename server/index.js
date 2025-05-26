@@ -2,17 +2,25 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import process from "process";
+import helmet from "helmet";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/besoins_affichage";
+
+// Middleware de sécurité
+app.use(helmet());
+app.use(express.static('dist')); // Servir les fichiers statiques de production
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: process.env.NODE_ENV === 'production' ? process.env.FRONTEND_URL : '*'
+}));
 app.use(express.json());
 
 // Connexion à MongoDB optimisée
 mongoose
-  .connect("mongodb://localhost:27017/besoins_affichage", {
+  .connect(MONGODB_URI, {
     maxPoolSize: 10,
     serverSelectionTimeoutMS: 5000,
     socketTimeoutMS: 45000,
