@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { debounce } from "lodash";
+import * as XLSX from "xlsx";
 import TableauBesoins from "../components/TableauBesoins";
 import axios from "axios";
 
@@ -85,6 +86,28 @@ function TableauPage() {
     }
   };
 
+  const exportToExcel = () => {
+    const dataToExport = filteredBesoins.map((item) => ({
+      "Date/Heure": new Date(item.dateCreation).toLocaleString("fr-FR"),
+      Annonceur: item.nomAnnonceur,
+      Prestataire: item.nomPrestataire,
+      Format: item.format,
+      "Format spécifique": item.formatSpecifique,
+      "Format visible": item.formatVisible,
+      "Nombre d'affiches": item.nombreAffiches,
+      "Adresse de livraison": item.adresseLivraison,
+      Commentaires: item.commentaires,
+    }));
+
+    const ws = XLSX.utils.json_to_sheet(dataToExport);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Besoins");
+    XLSX.writeFile(
+      wb,
+      `besoins_${new Date().toLocaleDateString("fr-FR")}.xlsx`
+    );
+  };
+
   // Composant SearchBar optimisé
   const SearchBar = () => (
     <div className="mb-6">
@@ -138,12 +161,20 @@ function TableauPage() {
         <>
           <div className="flex justify-between items-center mb-4">
             <SearchBar />
-            <button
-              onClick={viderBaseDeDonnees}
-              className="bg-red-600 text-white py-2 px-6 rounded-lg hover:bg-red-700 transition duration-300"
-            >
-              Vider la base de données
-            </button>
+            <div className="space-x-4">
+              <button
+                onClick={exportToExcel}
+                className="bg-green-600 text-white py-2 px-6 rounded-lg hover:bg-green-700 transition duration-300"
+              >
+                Exporter vers Excel
+              </button>
+              <button
+                onClick={viderBaseDeDonnees}
+                className="bg-red-600 text-white py-2 px-6 rounded-lg hover:bg-red-700 transition duration-300"
+              >
+                Vider la base de données
+              </button>
+            </div>
           </div>
           <TableauBesoins data={filteredBesoins} onDelete={supprimerBesoin} />
         </>

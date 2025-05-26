@@ -8,7 +8,7 @@ function AdminLoginPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (password === "Comymedia2025*") {
+    if (password === import.meta.env.VITE_ADMIN_PASSWORD) {
       localStorage.setItem("isAdmin", "true");
       navigate("/admin/tableau");
     } else {
