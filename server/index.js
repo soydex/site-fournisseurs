@@ -14,7 +14,9 @@ app.use(express.static('dist'));
 
 // Configuration CORS mise à jour pour MongoDB Atlas
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' ? ['https://ornate-piroshki-430ac1.netlify.app/', process.env.FRONTEND_URL] : '*'
+  origin: ['https://ornate-piroshki-430ac1.netlify.app', 'https://ornate-piroshki-430ac1.netlify.app/', process.env.FRONTEND_URL],
+  credentials: true,
+  methods: ['GET', 'POST', 'DELETE', 'OPTIONS']
 }));
 app.use(express.json());
 

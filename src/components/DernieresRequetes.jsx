@@ -1,5 +1,6 @@
 function DernieresRequetes({ requetes, onSupprimer }) {
-  if (!requetes.length) return null;
+  // Vérification que requetes est un tableau
+  if (!Array.isArray(requetes) || !requetes.length) return null;
 
   return (
     <div className="mt-8 p-6 bg-white rounded-lg shadow-md">
