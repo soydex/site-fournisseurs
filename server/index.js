@@ -10,20 +10,23 @@ const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/besoin
 
 // Middleware de sécurité
 app.use(helmet());
-app.use(express.static('dist')); // Servir les fichiers statiques de production
+app.use(express.static('dist'));
 
-// Middleware
+// Configuration CORS mise à jour pour MongoDB Atlas
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' ? process.env.FRONTEND_URL : '*'
+  origin: process.env.NODE_ENV === 'production' ? ['https://ornate-piroshki-430ac1.netlify.app/', process.env.FRONTEND_URL] : '*'
 }));
 app.use(express.json());
 
-// Connexion à MongoDB optimisée
+// Connexion à MongoDB optimisée avec options pour MongoDB Atlas
 mongoose
   .connect(MONGODB_URI, {
     maxPoolSize: 10,
     serverSelectionTimeoutMS: 5000,
     socketTimeoutMS: 45000,
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    retryWrites: true,
   })
   .then(() => console.log("Connexion à MongoDB réussie"))
   .catch((err) => console.error("Erreur de connexion à MongoDB:", err));

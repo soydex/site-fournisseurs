@@ -12,3 +12,4 @@
 
 [build.environment]
   NODE_VERSION = "18"
+  MONGODB_URI = "mongodb+srv://comadmin:comymedia2025@cluster0.ewmfj56.mongodb.net/besoins_affichage?retryWrites=true&w=majority"
