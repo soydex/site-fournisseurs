@@ -94,6 +94,7 @@ function App() {
                   src="/imgs/logo_comymedia.png"
                   alt="Logo"
                   className="mx-auto mb-4"
+                  width={400}
                 />
               </div>
               <h1 className="text-3xl font-bold text-center mb-8">

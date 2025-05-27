@@ -12,9 +12,14 @@ const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/besoin
 app.use(helmet());
 app.use(express.static('dist'));
 
-// Configuration CORS mise à jour pour MongoDB Atlas
+// Configuration CORS mise à jour
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' ? ['https://ornate-piroshki-430ac1.netlify.app/', process.env.FRONTEND_URL] : '*'
+  origin: [
+    'https://ornate-piroshki-430ac1.netlify.app',
+    'http://localhost:5173',
+    'http://localhost:4173'
+  ],
+  credentials: true
 }));
 app.use(express.json());
 
@@ -24,12 +29,16 @@ mongoose
     maxPoolSize: 10,
     serverSelectionTimeoutMS: 5000,
     socketTimeoutMS: 45000,
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
     retryWrites: true,
   })
-  .then(() => console.log("Connexion à MongoDB réussie"))
-  .catch((err) => console.error("Erreur de connexion à MongoDB:", err));
+  .then(() => {
+    console.log("Connexion à MongoDB réussie");
+    console.log("URI de connexion:", MONGODB_URI.replace(/\/\/([^:]+):([^@]+)@/, '//***:***@')); // Masque les credentials
+  })
+  .catch((err) => {
+    console.error("Erreur de connexion à MongoDB:", err);
+    process.exit(1); // Arrête l'application si la connexion échoue
+  });
 
 // Gestion des événements de connexion
 const db = mongoose.connection;
@@ -147,6 +156,24 @@ app.delete("/api/besoins", async (req, res) => {
     console.error("Erreur lors de la suppression de tous les besoins:", err);
     res.status(500).json({
       message: "Erreur serveur lors de la suppression des besoins",
+    });
+  }
+});
+
+// Route de test pour vérifier la connexion
+app.get('/api/test-connection', async (req, res) => {
+  try {
+    await mongoose.connection.db.admin().ping();
+    res.json({ 
+      status: 'success',
+      message: 'Connecté à MongoDB',
+      database: mongoose.connection.name
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      status: 'error',
+      message: 'Erreur de connexion à MongoDB',
+      error: error.message 
     });
   }
 });

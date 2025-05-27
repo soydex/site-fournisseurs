@@ -7,7 +7,14 @@ export default defineConfig({
   server: {
     host: true,
     proxy: {
-      "/api": "http://localhost:5000",
+      "/api": {
+        target:
+          process.env.NODE_ENV === "production"
+            ? "https://site-fournisseurs.onrender.com"
+            : "http://localhost:5000",
+        changeOrigin: true,
+        secure: false,
+      },
     },
   },
   build: {
@@ -21,8 +28,8 @@ export default defineConfig({
         },
       },
     },
-    target: 'esnext',
-    assetsDir: 'assets'
+    target: "esnext",
+    assetsDir: "assets",
   },
-  base: '/'
+  base: "/",
 });
