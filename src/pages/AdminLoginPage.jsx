@@ -33,7 +33,7 @@ function AdminLoginPage() {
           {error && <p className="text-red-500 mb-4">{error}</p>}
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
+            className="w-full bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700"
           >
             Se connecter
           </button>

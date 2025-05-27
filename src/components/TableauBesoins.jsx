@@ -10,6 +10,7 @@ function TableauBesoins({ data, onDelete }) {
 
   return (
     <div className="overflow-x-auto mt-8">
+      <img src="/imgs/logo_comymedia.png" alt="Logo" className="mx-auto mb-4" width={400} />
       <h2 className="text-2xl font-bold mb-4 text-center">Liste des besoins d'affichage</h2>
       
       {data.length === 0 ? (
