@@ -6,6 +6,7 @@ import helmet from "helmet";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/besoins_affichage";
 
 // Middleware de sécurité
 app.use(helmet());
@@ -13,15 +14,11 @@ app.use(express.static('dist'));
 
 // Configuration CORS mise à jour pour MongoDB Atlas
 app.use(cors({
-  origin: ['https://ornate-piroshki-430ac1.netlify.app', 'http://localhost:5173', 'https://site-fournisseurs.onrender.com'],
-  credentials: true,
-  methods: ['GET', 'POST', 'DELETE', 'OPTIONS']
+  origin: process.env.NODE_ENV === 'production' ? ['https://ornate-piroshki-430ac1.netlify.app/', process.env.FRONTEND_URL] : '*'
 }));
 app.use(express.json());
 
 // Connexion à MongoDB optimisée avec options pour MongoDB Atlas
-const MONGODB_URI = "mongodb+srv://comadmin:comymedia2025@cluster0.ewmfj56.mongodb.net/besoins_affichage?retryWrites=true&w=majority";
-
 mongoose
   .connect(MONGODB_URI, {
     maxPoolSize: 10,
@@ -31,8 +28,8 @@ mongoose
     useUnifiedTopology: true,
     retryWrites: true,
   })
-  .then(() => console.log("Connexion à MongoDB Atlas réussie"))
-  .catch((err) => console.error("Erreur de connexion à MongoDB Atlas:", err));
+  .then(() => console.log("Connexion à MongoDB réussie"))
+  .catch((err) => console.error("Erreur de connexion à MongoDB:", err));
 
 // Gestion des événements de connexion
 const db = mongoose.connection;
