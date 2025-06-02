@@ -136,6 +136,11 @@ app.get('/api/test-connection', async (req, res) => {
   }
 });
 
+// chech de santé 
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
+});
+
 
 app.use(express.static(path.join(__dirname, '../dist')));
 app.get('/*', (req, res) => {
