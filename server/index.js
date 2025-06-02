@@ -97,6 +97,15 @@ app.post("/api/besoins", async (req, res) => {
   }
 });
 
+// Ajout d'une validation des routes
+app.param('id', (req, res, next, id) => {
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: "ID invalide" });
+  }
+  next();
+});
+
+// Modification de la route de suppression
 app.delete("/api/besoins/:id", async (req, res) => {
   try {
     const deleted = await Besoin.findByIdAndDelete(req.params.id);
