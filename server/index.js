@@ -13,8 +13,7 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-const MONGODB_URI_netlify = "mongodb+srv://comadmin:comymedia2025*@cluster0.ewmfj56.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
-const MONGODB_URI = MONGODB_URI_netlify || "mongodb://localhost:27017/besoins_affichage";
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/besoins_affichage";
 
 // Middleware
 app.use(helmet());
@@ -36,7 +35,8 @@ mongoose.connect(MONGODB_URI, {
   retryWrites: true,
 }).then(() => {
   console.log("✅ Connexion à MongoDB réussie");
-  console.log("URI:", MONGODB_URI.replace(/\/\/([^:]+):([^@]+)@/, '//***:***@'));
+  // Affiche l'URI utilisée (masquée) pour debug Render
+  // console.log("URI:", MONGODB_URI.replace(/\/\/([^:]+):([^@]+)@/, '//***:***@'));
 }).catch((err) => {
   console.error("❌ Erreur de connexion à MongoDB:", err);
   process.exit(1);
