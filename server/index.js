@@ -16,7 +16,6 @@ app.use(express.static('dist'));
 // Configuration CORS mise à jour
 app.use(cors({
   origin: [
-    'https://ornate-piroshki-430ac1.netlify.app',
     'http://localhost:5173',
     'http://localhost:4173'
   ],
