@@ -136,11 +136,10 @@ app.get('/api/test-connection', async (req, res) => {
   }
 });
 
-// === SERVE REACT APP ===
-app.use(express.static(path.join(__dirname, 'dist')));
 
-app.get('/*path', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+app.use(express.static(path.join(__dirname, '../dist')));
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../dist', 'index.html'));
 });
 
 
