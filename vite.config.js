@@ -32,4 +32,9 @@ export default defineConfig({
     assetsDir: "assets",
   },
   base: "/",
+  preview: {
+    port: 4173,
+    host: true,
+    strictPort: true,
+  },
 });

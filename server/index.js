@@ -13,9 +13,18 @@ const MONGODB_URI = MONGODB_URI_netlify || "mongodb://localhost:27017/besoins_af
 app.use(helmet());
 app.use(express.static('dist'));
 
+// Ajout de la gestion des routes SPA
+app.get('*', (req, res, next) => {
+  if (req.url.startsWith('/api/')) {
+    return next();
+  }
+  res.sendFile('dist/index.html', { root: '.' });
+});
+
 // Configuration CORS mise à jour
 app.use(cors({
   origin: [
+    'https://site-fournisseurs.onrender.com',
     'http://localhost:5173',
     'http://localhost:4173'
   ],
