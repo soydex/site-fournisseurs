@@ -36,7 +36,7 @@ mongoose.connect(MONGODB_URI, {
 }).then(() => {
   console.log("✅ Connexion à MongoDB réussie");
   // Affiche l'URI utilisée (masquée) pour debug Render
-  // console.log("URI:", MONGODB_URI.replace(/\/\/([^:]+):([^@]+)@/, '//***:***@'));
+  console.log("URI:", MONGODB_URI.replace(/\/\/([^:]+):([^@]+)@/, '//***:***@'));
 }).catch((err) => {
   console.error("❌ Erreur de connexion à MongoDB:", err);
   process.exit(1);
