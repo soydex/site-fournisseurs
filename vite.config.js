@@ -7,16 +7,6 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
     host: true,
-    proxy: {
-      "/api": {
-        target:
-          process.env.NODE_ENV === "production"
-            ? "https://site-fournisseurs.onrender.com"
-            : "http://localhost:5000",
-        changeOrigin: true,
-        secure: false,
-      },
-    },
   },
   build: {
     outDir: "dist",

@@ -21,7 +21,7 @@ function TableauPage() {
         return;
       }
 
-      const response = await axios.get("/api/besoins");
+      const response = await axios.get("https://api.comymedia.fr/api/besoins");
       setBesoins(response.data);
       sessionStorage.setItem("besoinsCache", JSON.stringify(response.data));
       sessionStorage.setItem("besoinsCacheTimestamp", Date.now().toString());
@@ -61,7 +61,7 @@ function TableauPage() {
   const supprimerBesoin = async (id) => {
     if (window.confirm("Êtes-vous sûr de vouloir supprimer cette entrée ?")) {
       try {
-        await axios.delete(`/api/besoins/${id}`);
+        await axios.delete(`https://api.comymedia.fr/api/besoins/${id}`);
         // Mettre à jour l'état local après la suppression
         setBesoins(besoins.filter((besoin) => besoin._id !== id));
       } catch (error) {
@@ -75,7 +75,7 @@ function TableauPage() {
       window.confirm("Êtes-vous sûr de vouloir supprimer toutes les données ?")
     ) {
       try {
-        await axios.delete("/api/besoins");
+        await axios.delete("https://api.comymedia.fr/api/besoins");
         setBesoins([]);
       } catch (error) {
         console.error(

@@ -40,7 +40,7 @@ function App() {
 
   const ajouterBesoin = async (formData) => {
     try {
-      const response = await axios.post("/api/besoins", formData);
+      const response = await axios.post("https://api.comymedia.fr/api/besoins", formData);
       const besoinId = response.data._id;
       const timestamp = new Date().getTime();
       localStorage.setItem(`besoin_${besoinId}`, `${besoinId}|${timestamp}`);
@@ -58,7 +58,7 @@ function App() {
         .filter((key) => key.startsWith("besoin_"))
         .map((key) => localStorage.getItem(key).split("|")[0]);
 
-      const response = await axios.get("/api/besoins");
+      const response = await axios.get("https://api.comymedia.fr/api/besoins");
       const toutesLesRequetes = response.data;
       const mesRequetes = toutesLesRequetes.filter((req) =>
         mesBesoinsIds.includes(req._id)
@@ -72,7 +72,7 @@ function App() {
   const supprimerRequete = async (id) => {
     if (window.confirm("Êtes-vous sûr de vouloir supprimer cette demande ?")) {
       try {
-        await axios.delete(`/api/besoins/${id}`);
+        await axios.delete(`https://api.comymedia.fr/api/besoins/${id}`);
         localStorage.removeItem(`besoin_${id}`);
         setDernieresRequetes((prev) => prev.filter((req) => req._id !== id));
         alert("Demande supprimée avec succès");
