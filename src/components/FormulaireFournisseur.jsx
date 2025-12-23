@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 function FormulaireFournisseur({ onSubmit }) {
+  const location = useLocation();
   const [formData, setFormData] = useState({
     nomAnnonceur: "",
     nomPrestataire: "",
@@ -11,6 +13,38 @@ function FormulaireFournisseur({ onSubmit }) {
     adresseLivraison: "",
     commentaires: "",
   });
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const updates = {};
+    let hasUpdates = false;
+
+    if (params.get("nomAnnonceur")) {
+      updates.nomAnnonceur = params.get("nomAnnonceur");
+      hasUpdates = true;
+    }
+    if (params.get("format")) {
+      updates.format = params.get("format");
+      hasUpdates = true;
+    }
+
+    // Gestion du contexte/campagne
+    const context = params.get("imagecontext") || params.get("contexte"); 
+    if (context) {
+      // On préserve le commentaire existant s'il y en a un (peu probable au mount, mais bon)
+      updates.commentaires = formData.commentaires 
+        ? `${formData.commentaires}\n\n[Campagne: ${context}]`
+        : `[Campagne: ${context}]`;
+      hasUpdates = true;
+    }
+
+    if (hasUpdates) {
+      setFormData(prev => ({
+        ...prev,
+        ...updates
+      }));
+    }
+  }, [location.search]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

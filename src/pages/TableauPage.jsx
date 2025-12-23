@@ -108,6 +108,92 @@ function TableauPage() {
     );
   };
 
+  // Composant LinkGenerator
+  const LinkGenerator = () => {
+    const [genData, setGenData] = useState({
+      nomAnnonceur: "",
+      format: "",
+      context: ""
+    });
+    const [generatedLink, setGeneratedLink] = useState("");
+
+    const handleGenChange = (e) => {
+      setGenData({ ...genData, [e.target.name]: e.target.value });
+    };
+
+    const generateLink = () => {
+      const baseUrl = window.location.origin;
+      const params = new URLSearchParams();
+      if (genData.nomAnnonceur) params.append("nomAnnonceur", genData.nomAnnonceur);
+      if (genData.format) params.append("format", genData.format);
+      if (genData.context) params.append("contexte", genData.context);
+      
+      setGeneratedLink(`${baseUrl}/?${params.toString()}`);
+    };
+
+    const copyToClipboard = () => {
+      navigator.clipboard.writeText(generatedLink);
+      alert("Lien copié !");
+    };
+
+    return (
+      <div className="bg-white p-6 rounded-lg shadow-md mb-8 border border-blue-100">
+        <h3 className="text-xl font-bold mb-4 text-blue-800">Générateur de Lien Campagne</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+          <input
+            type="text"
+            name="nomAnnonceur"
+            placeholder="Nom Annonceur (ex: Client X)"
+            value={genData.nomAnnonceur}
+            onChange={handleGenChange}
+            className="p-2 border rounded"
+          />
+          <select
+            name="format"
+            value={genData.format}
+            onChange={handleGenChange}
+            className="p-2 border rounded"
+          >
+            <option value="">Sélectionner un format (Optionnel)</option>
+            <option value="120X176">120X176</option>
+            <option value="400X300">400X300</option>
+            <option value="275x68">275x68</option>
+            <option value="320X240 COLLE">320X240 COLLE</option>
+            <option value="99X83">99X83</option>
+            <option value="240X160">240X160</option>
+            <option value="320X240 DEROULANT">320X240 DEROULANT</option>
+          </select>
+          <input
+            type="text"
+            name="context"
+            placeholder="Contexte (ex: Salon Habitat)"
+            value={genData.context}
+            onChange={handleGenChange}
+            className="p-2 border rounded"
+          />
+        </div>
+        <button
+          onClick={generateLink}
+          className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition mb-4"
+        >
+          Générer le lien
+        </button>
+        
+        {generatedLink && (
+          <div className="p-4 bg-gray-50 rounded flex justify-between items-center">
+            <code className="text-sm break-all text-blue-600">{generatedLink}</code>
+            <button
+              onClick={copyToClipboard}
+              className="ml-4 px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded text-sm transition"
+            >
+              Copier
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  };
+
   // Composant SearchBar optimisé
   const SearchBar = () => (
     <div className="mb-6">
@@ -155,6 +241,9 @@ function TableauPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <h2 className="text-2xl font-bold mb-4">Tableau des besoins</h2>
+      
+      <LinkGenerator />
+
       {loading ? (
         <p className="text-center">Chargement des données...</p>
       ) : (
