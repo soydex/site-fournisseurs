@@ -17,8 +17,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    template: "%s | Com'y",
-    default: "Nouvelle Demande | Com'y",
+    template: "%s | Com Y Média",
+    default: "Nouvelle Demande | Com Y Média",
   },
   description: "Plateforme de gestion des demandes d'affichage et logistique.",
 };
